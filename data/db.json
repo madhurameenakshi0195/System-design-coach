@@ -1,0 +1,13 @@
+{
+  "mastery" : {
+    "databases" : 1.9,
+    "scaling-reads" : 1.9,
+    "hashing" : 1.9,
+    "caching" : 1.9
+  },
+  "history" : [ {
+    "date" : "2026-11-09",
+    "problem" : "URL shortener",
+    "total" : 0
+  } ]
+}

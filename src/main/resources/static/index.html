@@ -1,0 +1,106 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>System Design Coach</title>
+<style>
+:root{--bg:#f6f6f2;--card:#fff;--ink:#161a22;--mute:#6b7280;--line:#e4e4dc;--brand:#0e7c66;--soft:#e6f4f0;--amber:#f5b83d;--bad:#b3261e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,'Segoe UI',Inter,system-ui,sans-serif}
+button,textarea,input{font:inherit;color:inherit}button{cursor:pointer}:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.hide{display:none!important}h1,h2,h3{margin:0;letter-spacing:-.02em}
+header{display:flex;align-items:center;gap:20px;padding:14px 28px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.logo{font-weight:800;font-size:18px;letter-spacing:-.03em}.logo i{font-style:normal;background:var(--brand);color:#fff;border-radius:7px;padding:2px 8px;margin-right:8px}
+nav{display:flex;gap:4px;margin-left:auto}nav button{border:0;background:none;padding:7px 14px;border-radius:8px;color:var(--mute);font-weight:600}nav button.on{background:var(--soft);color:var(--brand)}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 14px;font-weight:600}.btn:hover{border-color:var(--ink)}.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff}.btn.pri:hover{background:#0a5f4e}.btn:disabled{opacity:.45;cursor:not-allowed}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 28px}
+.hero h1{font-size:44px;line-height:1.08;max-width:15ch}.hero p{font-size:18px;color:var(--mute);max-width:56ch;margin:14px 0 0}
+.how{display:flex;gap:28px;margin:26px 0 8px;flex-wrap:wrap;color:var(--mute);font-size:14px}.how b{color:var(--ink)}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;margin-top:26px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.pc{display:flex;flex-direction:column;gap:10px;transition:border-color .15s}.pc:hover{border-color:var(--brand)}.pc h3{font-size:20px}.pc p{margin:0;color:var(--mute)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{background:var(--bg);border-radius:20px;padding:2px 10px;font-size:12px;color:var(--mute)}
+.rec{background:var(--amber);color:#3b2a00;font-size:12px;font-weight:700;border-radius:6px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+.bar{display:flex;align-items:center;gap:10px;font-size:13px;margin:9px 0}.bar span{width:96px;color:var(--mute)}.bar i{flex:1;height:7px;background:var(--bg);border-radius:9px;overflow:hidden}.bar u{display:block;height:100%;background:var(--brand);border-radius:9px}
+.work{display:grid;grid-template-columns:minmax(0,1fr) 440px;gap:20px;max-width:1500px;margin:0 auto;padding:20px 28px;height:calc(100vh - 62px)}
+.col{display:flex;flex-direction:column;min-height:0}.top{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex-wrap:wrap}
+.steps{display:flex;gap:6px;flex-wrap:wrap}.steps span{padding:4px 12px;border-radius:20px;font-size:13px;background:var(--card);border:1px solid var(--line);color:var(--mute)}.steps .cur{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}.steps .done{background:var(--soft);color:var(--brand);border-color:var(--soft)}
+#chat{flex:1;overflow:auto;display:flex;flex-direction:column;gap:14px;padding:6px 2px}
+.m{max-width:86%;padding:12px 15px;border-radius:14px;white-space:pre-wrap}.m.i{background:var(--card);border:1px solid var(--line);align-self:flex-start;border-top-left-radius:4px}.m.i:before{content:'Interviewer';display:block;font-size:12px;font-weight:700;color:var(--brand);margin-bottom:2px}.m.l{background:var(--brand);color:#fff;align-self:flex-end;border-top-right-radius:4px}
+.dock{display:flex;gap:10px;margin-top:12px;align-items:flex-end}.dock textarea{flex:1;height:84px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card);resize:none}.dock .acts{display:grid;gap:8px}
+.tabs{display:flex;gap:4px;margin-bottom:12px}.tabs button{flex:1;border:1px solid var(--line);background:var(--card);padding:8px;border-radius:9px;font-weight:600;color:var(--mute)}.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pal{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.pal button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 10px;font-size:13px;cursor:grab}.pal button:hover{border-color:var(--brand);background:var(--soft)}
+#cvw{flex:1;min-height:300px;border:1px solid var(--line);border-radius:14px;background:var(--card) radial-gradient(#d9d9d0 1px,transparent 1px);background-size:20px 20px;position:relative;overflow:hidden}#cv{width:100%;height:100%;display:block;touch-action:none}
+.empty{position:absolute;inset:0;display:grid;place-items:center;color:var(--mute);text-align:center;padding:30px;pointer-events:none}
+.nd rect{fill:#fff;stroke:var(--ink);stroke-width:1.5}.nd text{font-size:12.5px;font-weight:600;fill:var(--ink);pointer-events:none}.nd{cursor:grab}.nd.sel rect{stroke:var(--brand);stroke-width:3;fill:var(--soft)}.nd.from rect{stroke:var(--amber);stroke-width:3}
+.tools{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.tools .btn{padding:6px 11px;font-size:13px}.tools .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-size:13px;color:var(--mute);margin:10px 0 3px}input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.kpi div{background:var(--bg);border-radius:10px;padding:10px 12px}.kpi b{font-size:21px;display:block}.kpi small{color:var(--mute)}
+.note{margin-top:12px;padding:10px 12px;background:var(--soft);border-radius:10px;font-size:14px}
+dialog{max-width:700px;width:92%;border:0;border-radius:18px;padding:28px;box-shadow:0 30px 80px #0005}dialog::backdrop{background:#161a2299}
+.sc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}.sc div{background:var(--bg);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--mute)}.sc b{font-size:26px;color:var(--ink)}
+.opt{display:block;width:100%;text-align:left;margin:10px 0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-weight:600}.opt:hover{border-color:var(--brand)}.opt.ok{background:#d8f1e4;border-color:#1d7a4d}.opt.no{background:#fbdcd9;border-color:var(--bad)}
+@media(max-width:1000px){.cols,.work{grid-template-columns:1fr;height:auto}.grid{grid-template-columns:1fr}.hero h1{font-size:34px}#chat{max-height:55vh}}
+</style></head><body>
+<header><div class="logo"><i>SD</i>System Design Coach</div><small id="mode" style="color:var(--mute)"></small><nav><button id="n1" class="on">Practice</button><button id="n2">Tool drill</button></nav></header>
+
+<main id="home" class="wrap"><div class="hero"><h1>Practice system design out loud.</h1><p>Pick a problem. An AI interviewer asks why behind every choice, checks your numbers with real code, reviews your diagram, then tells you what to study next.</p>
+<div class="how"><span><b>Pick</b> a problem</span><span><b>Answer</b> five interview stages</span><span><b>Draw</b> your architecture</span><span><b>Get scored</b> with the reasons</span></div></div>
+<div class="cols"><div><h3 style="margin-bottom:14px">Problems</h3><div class="grid" id="probs"></div></div><div><div class="card"><h3>Your skills</h3><p style="color:var(--mute);margin:4px 0 8px;font-size:13px">Starts at 2.5 of 5. Rises as you improve.</p><div id="mast"></div></div><div class="card" style="margin-top:16px"><h3>Recent runs</h3><div id="hist" style="color:var(--mute);font-size:14px;margin-top:6px">Finish one interview to see your scores here.</div></div></div></div></main>
+
+<main id="work" class="work hide"><section class="col"><div class="top"><button class="btn" id="back">Problems</button><h3 id="ptitle"></h3><div class="steps" id="steps"></div></div><div id="chat"></div>
+<div class="dock"><textarea id="ans" placeholder="Answer here. Explain why, not just what. Ctrl+Enter to send."></textarea><div class="acts"><button class="btn pri" id="send">Send</button><button class="btn" id="next">Next stage</button><button class="btn" id="fin">Finish and score</button></div></div></section>
+<section class="col"><div class="tabs"><button id="tc" class="on">Diagram</button><button id="tk">Calculator</button></div>
+<div id="pc" class="col" style="flex:1"><div class="pal" id="pal"></div><div id="cvw"><svg id="cv"></svg><div class="empty" id="emp">Drag components here or click them.<br>Use Connect to draw arrows between them.</div></div>
+<div class="tools"><button class="btn" id="bConn">Connect</button><button class="btn" id="bDel">Delete selected</button><button class="btn" id="bClr">Clear</button><button class="btn pri" id="bRev" style="margin-left:auto">Ask coach to review</button></div></div>
+<div id="pk" class="card hide"><div class="g2"><div><label for="dau">Daily users</label><input id="dau" type="number" value="10000000"></div><div><label for="req">Requests per user per day</label><input id="req" type="number" value="10"></div><div><label for="ratio">Reads per write</label><input id="ratio" type="number" value="100"></div><div><label for="kb">Object size (KB)</label><input id="kb" type="number" value="1"></div></div><label for="yrs">Years of data kept</label><input id="yrs" type="number" value="5"><button class="btn pri" id="calc" style="margin-top:14px;width:100%">Calculate</button><div id="res"><p class="note">The numbers are computed by code, then shared with your interviewer so it can check your reasoning.</p></div></div></section></main>
+
+<main id="drill" class="wrap hide" style="max-width:720px"><div class="card"><small style="color:var(--mute)">Which tool fits?</small><h2 id="dq" style="margin:6px 0 10px;font-size:24px"></h2><div id="dopts"></div><p id="dwhy" class="note hide"></p><button class="btn pri" id="dnext" style="margin-top:14px">Next scenario</button></div></main>
+<dialog id="rep"></dialog>
+<script>
+const $=s=>document.querySelector(s),api=(p,b)=>fetch('/api/'+p,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{}).then(r=>r.json());
+const esc=t=>String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let S,sid=null,stage=0,cur,calc={},N=[],E=[],sel=null,conn=false,from=null,drag=null,uid=1;
+function view(v){['home','work','drill'].forEach(x=>$('#'+x).classList.toggle('hide',x!=v));$('#n1').classList.toggle('on',v!='drill');$('#n2').classList.toggle('on',v=='drill')}
+function add(role,t){const d=document.createElement('div');d.className='m '+(role=='i'?'i':'l');d.textContent=t;$('#chat').append(d);$('#chat').scrollTop=1e9}
+function steps(){$('#steps').innerHTML=S.stages.map((s,i)=>`<span class="${i==stage?'cur':i<stage?'done':''}">${s.name}</span>`).join('')}
+function home(){$('#probs').innerHTML=S.problems.map(p=>`<div class="card pc"><h3>${p.title}${p.id==S.recommended&&S.history.length?'<em class="rec">Suggested next</em>':''}</h3><p>${p.brief}</p><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div><button class="btn pri" data-id="${p.id}" style="align-self:flex-start;margin-top:4px">Start interview</button></div>`).join('');
+ const tags=[...new Set(S.problems.flatMap(p=>p.tags))];$('#mast').innerHTML=tags.map(t=>{const v=S.mastery[t]??2.5;return `<div class="bar"><span>${t}</span><i><u style="width:${v*20}%"></u></i></div>`}).join('');
+ if(S.history.length)$('#hist').innerHTML=S.history.slice().reverse().map(h=>`<div class="bar"><span style="width:auto;flex:1;color:var(--ink)">${h.problem}</span><b>${h.total}/30</b></div>`).join('')}
+async function init(){S=await api('state');$('#mode').textContent=S.live?'BharatCode connected':'Demo mode (add keys in .env)';
+ $('#pal').innerHTML=S.components.map(c=>`<button draggable="true" data-l="${c}">${c}</button>`).join('');home();steps()}
+$('#probs').onclick=async e=>{const b=e.target.closest('[data-id]');if(!b)return;b.disabled=true;cur=S.problems.find(p=>p.id==b.dataset.id);const r=await api('start',{problemId:cur.id});sid=r.id;stage=0;N=[];E=[];sel=from=null;
+ $('#ptitle').textContent=cur.title;$('#chat').innerHTML='';add('i',r.text);$('#ans').value='';steps();draw();view('work');$('#ans').focus();b.disabled=false};
+$('#back').onclick=()=>{view('home')};
+const extra=()=>({numbers:calc,board:{components:N.map(n=>n.label),connections:E.map(([a,b])=>N.find(n=>n.id==a).label+' -> '+N.find(n=>n.id==b).label)}});
+async function send(t){t=t||$('#ans').value.trim();if(!t||!sid)return;add('l',t);$('#ans').value='';$('#send').disabled=true;add('i','Thinking…');const th=$('#chat').lastChild;const r=await api('answer',{id:sid,text:t,extra:extra()});th.textContent=r.text||r.error;$('#send').disabled=false}
+$('#send').onclick=()=>send();$('#ans').onkeydown=e=>{if(e.key=='Enter'&&(e.ctrlKey||e.metaKey))send()};
+$('#bRev').onclick=()=>send(N.length?'Please review my diagram and tell me what is weak.':'I have not drawn anything yet. What should I include?');
+$('#next').onclick=async()=>{const r=await api('next',{id:sid});if(r.error){add('i','That was the last stage. Press Finish and score.');return}stage=r.stage;add('i',r.text);steps()};
+$('#fin').onclick=async()=>{$('#fin').disabled=true;const r=await api('finish',{id:sid});$('#fin').disabled=false;if(r.error)return;const nm={requirements:'Requirements',estimation:'Estimation',components:'Components',data:'Data',scaling:'Scaling',tradeoffs:'Trade-offs'};
+ $('#rep').innerHTML=`<h2>Your report</h2><p style="color:var(--mute)">${esc(r.summary)}</p><div class="sc">${Object.entries(r.scores).map(([k,v])=>`<div>${nm[k]}<br><b>${v}</b>/5</div>`).join('')}</div><h3>What went well</h3><ul>${r.strengths.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h3>What to fix</h3><ul>${r.gaps.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><h3>Which tool, and when</h3>${r.notes.length?r.notes.map(n=>`<p><b>${n.tag}: ${n.pick}</b><br>Use it when: ${n.use}<br><span style="color:var(--bad)">Avoid it when: ${n.avoid}</span></p>`).join(''):'<p>No weak areas this run.</p>'}<p>Suggested next problem: <b>${S.problems.find(p=>p.id==r.recommended).title}</b></p><button class="btn pri" id="rc">Back to problems</button>`;
+ $('#rep').showModal();$('#rc').onclick=async()=>{$('#rep').close();await init();view('home')}};
+function tab(c){$('#pc').classList.toggle('hide',!c);$('#pk').classList.toggle('hide',c);$('#tc').classList.toggle('on',c);$('#tk').classList.toggle('on',!c)}
+$('#tc').onclick=()=>tab(true);$('#tk').onclick=()=>tab(false);
+$('#calc').onclick=async()=>{calc={dau:$('#dau').value,req:$('#req').value,ratio:$('#ratio').value,kb:$('#kb').value,years:$('#yrs').value};const r=await api('estimate',calc);calc.result=r;const f=x=>x.toLocaleString();
+ $('#res').innerHTML=`<div class="kpi"><div><b>${f(r.avgQps)}</b><small>average QPS</small></div><div><b>${f(r.peakQps)}</b><small>peak QPS (3x)</small></div><div><b>${f(r.readQps)}</b><small>read QPS at peak</small></div><div><b>${f(r.writeQps)}</b><small>write QPS at peak</small></div><div><b>${f(r.storageGB)} GB</b><small>storage</small></div><div><b>${r.bandwidthMbps} Mbps</b><small>peak bandwidth</small></div></div><p class="note">${r.note}</p>`};
+const svg=$('#cv');
+function pt(e){const r=svg.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
+function draw(){$('#emp').classList.toggle('hide',N.length>0);$('#bConn').classList.toggle('on',conn);
+ const ln=E.map(([a,b])=>{const A=N.find(n=>n.id==a),B=N.find(n=>n.id==b),dx=B.x-A.x,dy=B.y-A.y,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L,k=(o)=>Math.min(52/Math.abs(o.x||1e-9),20/Math.abs(o.y||1e-9))+3,t=k({x:ux,y:uy});
+  return `<line x1="${A.x+ux*t}" y1="${A.y+uy*t}" x2="${B.x-ux*t}" y2="${B.y-uy*t}" stroke="#6b7280" stroke-width="2" marker-end="url(#ar)"/>`}).join('');
+ svg.innerHTML='<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0L10 5L0 10z" fill="#6b7280"/></marker></defs>'+ln+N.map(n=>`<g class="nd ${n.id==sel?'sel':''} ${n.id==from?'from':''}" data-id="${n.id}" transform="translate(${n.x-52},${n.y-20})"><rect width="104" height="40" rx="10"/><text x="52" y="25" text-anchor="middle">${esc(n.label)}</text></g>`).join('')}
+function put(l,x,y){N.push({id:uid++,label:l,x,y});draw()}
+$('#pal').onclick=e=>{const l=e.target.dataset.l;if(l)put(l,80+(N.length%4)*125,60+Math.floor(N.length/4)*80)};
+$('#pal').ondragstart=e=>e.dataTransfer.setData('text/plain',e.target.dataset.l);
+svg.ondragover=e=>e.preventDefault();svg.ondrop=e=>{e.preventDefault();const l=e.dataTransfer.getData('text/plain');if(l){const p=pt(e);put(l,p.x,p.y)}};
+svg.onpointerdown=e=>{const g=e.target.closest('.nd');if(!g){sel=from=null;draw();return}const id=+g.dataset.id;
+ if(conn){if(from==null)from=id;else if(from!=id){if(!E.some(x=>x[0]==from&&x[1]==id))E.push([from,id]);from=null}draw();return}
+ sel=id;const n=N.find(x=>x.id==id),p=pt(e);drag={n,dx:n.x-p.x,dy:n.y-p.y};svg.setPointerCapture(e.pointerId);draw()};
+svg.onpointermove=e=>{if(!drag)return;const p=pt(e);drag.n.x=Math.max(52,p.x+drag.dx);drag.n.y=Math.max(22,p.y+drag.dy);draw()};
+svg.onpointerup=()=>drag=null;
+$('#bConn').onclick=()=>{conn=!conn;from=null;draw()};
+$('#bDel').onclick=()=>{if(sel==null)return;N=N.filter(n=>n.id!=sel);E=E.filter(x=>x[0]!=sel&&x[1]!=sel);sel=null;draw()};
+$('#bClr').onclick=()=>{N=[];E=[];sel=from=null;draw()};
+document.addEventListener('keydown',e=>{if((e.key=='Delete'||e.key=='Backspace')&&document.activeElement.tagName!='TEXTAREA'&&document.activeElement.tagName!='INPUT')$('#bDel').click()});
+let q;async function drill(){q=await api('drill');$('#dq').textContent=q.s;$('#dwhy').classList.add('hide');$('#dopts').innerHTML=q.o.map((o,i)=>`<button class="opt" data-i="${i}">${o}</button>`).join('')}
+$('#dopts').onclick=async e=>{const b=e.target.closest('.opt');if(!b||!$('#dwhy').classList.contains('hide'))return;const r=await api('drill',{i:q.i,pick:+b.dataset.i});b.classList.add(r.correct?'ok':'no');$('#dwhy').classList.remove('hide');$('#dwhy').innerHTML=(r.correct?'<b>Correct.</b> ':`<b>Not quite.</b> Best answer: ${esc(r.answer)}. `)+esc(r.why)};
+$('#dnext').onclick=drill;$('#n1').onclick=()=>view(sid&&!$('#work').dataset.x?'home':'home');$('#n2').onclick=()=>{view('drill');drill()};
+init();
+</script></body></html>
